@@ -103,6 +103,9 @@ public class Game
         if(currentRoom.westExit != null) {
             System.out.print("west ");
         }
+        if(currentRoom.southEastExit != null) {
+            System.out.print("southEast ");
+        }
         System.out.println();
     }    
     
@@ -177,6 +180,9 @@ public class Game
         }
         if(direction.equals("west")) {
             nextRoom = currentRoom.westExit;
+        }
+        if(direction.equals("southEast")) {
+            nextRoom = currentRoom.southEastExit;
         }
 
         if (nextRoom == null) {
