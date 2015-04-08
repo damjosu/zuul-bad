@@ -34,23 +34,24 @@ public class Game
      */
     private void createRooms()
     {
-        Room outside, theater, pub, lab, office;
-      
-        // create the rooms
-        outside = new Room("outside the main entrance of the university");
-        theater = new Room("in a lecture theater");
-        pub = new Room("in the campus pub");
-        lab = new Room("in a computing lab");
-        office = new Room("in the computing admin office");
+        Room entrada, recepcion, salaDeReuniones, servicios, recursosHumanos, despachoDelDirector, salaDeProyecciones;
+        entrada = new Room("en la entrada del edificio");
+        recepcion = new Room("en recepción");
+        salaDeReuniones = new Room("en la sala de reuniones");
+        servicios = new Room("en los servicios");
+        recursosHumanos = new Room("en recursos humanos");
+        despachoDelDirector = new Room("en el despacho del director");
+        salaDeProyecciones = new Room ("en la sala de proyecciones");
         
-        // initialise room exits
-        outside.setExits(null, theater, lab, pub);
-        theater.setExits(null, null, null, outside);
-        pub.setExits(null, outside, null, null);
-        lab.setExits(outside, office, null, null);
-        office.setExits(null, null, null, lab);
-
-        currentRoom = outside;  // start game outside
+        entrada.setExits(recepcion, null, null, null);
+        recepcion.setExits(null, salaDeReuniones, null, recursosHumanos);
+        salaDeReuniones.setExits(servicios, null, null, recepcion);
+        servicios.setExits(null, null, salaDeReuniones, null);
+        recursosHumanos.setExits(despachoDelDirector, recepcion, null, null);
+        despachoDelDirector.setExits(null, salaDeProyecciones, recursosHumanos, null);
+        salaDeProyecciones.setExits(null, null, null, despachoDelDirector);
+        
+        currentRoom = entrada;      
     }
 
     /**
@@ -172,11 +173,11 @@ public class Game
         }
 
         if (nextRoom == null) {
-            System.out.println("There is no door!");
+            System.out.println("No hay puerta!");
         }
         else {
             currentRoom = nextRoom;
-            System.out.println("You are " + currentRoom.getDescription());
+            System.out.println("Estás " + currentRoom.getDescription());
             System.out.print("Exits: ");
             if(currentRoom.northExit != null) {
                 System.out.print("north ");
