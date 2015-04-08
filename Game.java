@@ -80,11 +80,8 @@ public class Game
         System.out.println();
         System.out.println("Bienvenido a The Office!");
         System.out.println("Escribe 'help' si necesitas ayuda.");
-        System.out.println();
-        System.out.println("Estás " + currentRoom.getDescription());
-        System.out.print("Exits: ");
+        System.out.println();        
         printLocationInfo();
-        System.out.println();
     }
     
     /**
@@ -92,6 +89,8 @@ public class Game
      */
     private void printLocationInfo()
     {
+        System.out.println("Estás " + currentRoom.getDescription());
+        System.out.print("Exits: ");
         if(currentRoom.northExit != null) {
             System.out.print("north ");
         }
@@ -104,6 +103,7 @@ public class Game
         if(currentRoom.westExit != null) {
             System.out.print("west ");
         }
+        System.out.println();
     }    
     
     /**
@@ -184,10 +184,7 @@ public class Game
         }
         else {
             currentRoom = nextRoom;
-            System.out.println("Estás " + currentRoom.getDescription());
-            System.out.print("Exits: ");
-            printLocationInfo();
-            System.out.println();
+            printLocationInfo();            
         }
     }
 
