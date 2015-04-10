@@ -14,12 +14,12 @@
  */
 public class Room 
 {
-    public String description;
-    public Room northExit;
-    public Room southExit;
-    public Room eastExit;
-    public Room westExit;
-    public Room southEastExit;
+    private String description;
+    private Room northExit;
+    private Room southExit;
+    private Room eastExit;
+    private Room westExit;
+    private Room southEastExit;
 
     /**
      * Create a room described "description". Initially, it has
@@ -53,7 +53,61 @@ public class Room
         if(southEast != null)
             southEastExit = southEast;
     }
-
+    
+    public Room getExit(String theExit)
+    {
+        Room exit = null;
+        switch (theExit) 
+        {
+            case "north" : exit = northExit;
+            break;
+            case "south" : exit = southExit;
+            break;
+            case "east" : exit = eastExit;
+            break;
+            case "west" : exit = westExit;
+            break;
+            default : exit = null;
+        }
+        return exit;
+    }
+    
+    /**
+     * Return a description of the room's exits.
+     * For example: "Exits: north east west"
+     *
+     * @ return A description of the available exits.
+     */
+    public String getExitString()
+    {
+        String exits = "";
+        if (northExit != null)
+        {
+            exits = " North";
+        }
+        
+        if (eastExit != null)
+        {
+            exits += " East";
+        }
+        
+        if (westExit != null)
+        {
+            exits += " West";
+        }
+        
+        if (southExit != null)
+        {
+            exits += " South";
+        }
+        
+        if (southEastExit != null)
+        {
+            exits += " SouthEast";
+        }
+        return exits;
+    }
+    
     /**
      * @return The description of the room.
      */
@@ -61,5 +115,5 @@ public class Room
     {
         return description;
     }
-
+    
 }
