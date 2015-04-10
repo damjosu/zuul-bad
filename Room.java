@@ -17,12 +17,6 @@ import java.util.Set;
 public class Room 
 {
     private String description;
-    private Room northExit;
-    private Room southExit;
-    private Room eastExit;
-    private Room westExit;
-    private Room southEastExit;
-    private Room northWestExit;
     private HashMap<String, Room> rooms;
 
     /**
@@ -49,37 +43,31 @@ public class Room
     {
         if(north != null)
         {
-            northExit = north;  
             rooms.put("north", north);
         }
                       
         if(east != null)            
         {
-            eastExit = east;
             rooms.put("east", east);
         }
         
         if(south != null)
         {
-             southExit = south;
              rooms.put("south", south);
         }
            
         if(west != null)
         {
-             westExit = west;
              rooms.put("west", west);
         }
            
         if(southEast != null)
         {
-            southEastExit = southEast;
             rooms.put("southEast", southEast);
         }
             
-        if(northWestExit != null)
+        if(northWest != null)
         {
-            northWestExit = northWest;
             rooms.put("northWest", northWest);
         }
             
@@ -120,4 +108,15 @@ public class Room
         return description;
     }
     
+    /**
+     * Return a long description of this room, of the form:
+     *     You are in the 'name of room'
+     *     Exits: north west southwest
+     * @return A description of the room, including exits.
+     */
+    public String getLongDescription()
+    {
+        String roomInfo = null;
+        return roomInfo = "You are in the " + getDescription() + "\n Exits: " + getExitString();
+    }
 }
