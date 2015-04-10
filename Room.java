@@ -1,3 +1,5 @@
+import java.util.HashMap;
+import java.util.Set;
 /**
  * Class Room - a room in an adventure game.
  *
@@ -21,6 +23,7 @@ public class Room
     private Room westExit;
     private Room southEastExit;
     private Room northWestExit;
+    private HashMap<String, Room> rooms;
 
     /**
      * Create a room described "description". Initially, it has
@@ -31,6 +34,7 @@ public class Room
     public Room(String description) 
     {
         this.description = description;
+        rooms = new HashMap<>();
     }
 
     /**
@@ -44,39 +48,51 @@ public class Room
     public void setExits(Room north, Room east, Room south, Room west, Room southEast, Room northWest) 
     {
         if(north != null)
-            northExit = north;
-        if(east != null)
+        {
+            northExit = north;  
+            rooms.put("north", north);
+        }
+                      
+        if(east != null)            
+        {
             eastExit = east;
+            rooms.put("east", east);
+        }
+        
         if(south != null)
-            southExit = south;
+        {
+             southExit = south;
+             rooms.put("south", south);
+        }
+           
         if(west != null)
-            westExit = west;
+        {
+             westExit = west;
+             rooms.put("west", west);
+        }
+           
         if(southEast != null)
+        {
             southEastExit = southEast;
+            rooms.put("southEast", southEast);
+        }
+            
         if(northWestExit != null)
+        {
             northWestExit = northWest;
+            rooms.put("northWest", northWest);
+        }
+            
     }
     
     public Room getExit(String theExit)
     {
         Room exit = null;
-        switch (theExit) 
+        if (rooms.containsKey(theExit))
         {
-            case "north" : exit = northExit;
-            break;
-            case "south" : exit = southExit;
-            break;
-            case "east" : exit = eastExit;
-            break;
-            case "west" : exit = westExit;
-            break;
-            case "southEast" : exit = southEastExit;
-            break;
-            case "northWest" : exit = northWestExit;
-            break;
-            default : exit = null;
+            exit = rooms.get(theExit);
         }
-        return exit;
+        return exit;        
     }
     
     /**
@@ -87,39 +103,15 @@ public class Room
      */
     public String getExitString()
     {
-        String exits = "";
-        if (northExit != null)
+        String theExits = "";
+        Set<String> exits = rooms.keySet();
+        for (String exit : exits)
         {
-            exits = " North";
-        }
-        
-        if (eastExit != null)
-        {
-            exits += " East";
-        }
-        
-        if (westExit != null)
-        {
-            exits += " West";
-        }
-        
-        if (southExit != null)
-        {
-            exits += " South";
-        }
-        
-        if (southEastExit != null)
-        {
-            exits += " SouthEast";
-        }
-        
-        if (northWestExit != null)
-        {
-            exits += " northWest";
-        }
-        return exits;
+            theExits += exit;
+        }        
+        return theExits;
     }
-    
+      
     /**
      * @return The description of the room.
      */
