@@ -43,13 +43,13 @@ public class Game
         despachoDelDirector = new Room("en el despacho del director");
         salaDeProyecciones = new Room ("en la sala de proyecciones");
         
-        entrada.setExits(recepcion, null, null, null, null);
-        recepcion.setExits(null, salaDeReuniones, null, recursosHumanos, null);
-        salaDeReuniones.setExits(servicios, null, null, recepcion, null);
-        servicios.setExits(null, null, salaDeReuniones, null, null);
-        recursosHumanos.setExits(despachoDelDirector, recepcion, null, null, null);
-        despachoDelDirector.setExits(null, salaDeProyecciones, recursosHumanos, null, null);
-        salaDeProyecciones.setExits(null, null, null, despachoDelDirector, salaDeReuniones);
+        entrada.setExits(recepcion, null, null, null, null, null);
+        recepcion.setExits(null, salaDeReuniones, null, recursosHumanos, null, null);
+        salaDeReuniones.setExits(servicios, null, null, recepcion, null, salaDeProyecciones);
+        servicios.setExits(null, null, salaDeReuniones, null, null, null);
+        recursosHumanos.setExits(despachoDelDirector, recepcion, null, null, null, null);
+        despachoDelDirector.setExits(null, salaDeProyecciones, recursosHumanos, null, null, null);
+        salaDeProyecciones.setExits(null, null, null, despachoDelDirector, salaDeReuniones, null);
         
         currentRoom = entrada;      
     }
