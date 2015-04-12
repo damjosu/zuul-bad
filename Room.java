@@ -75,12 +75,7 @@ public class Room
     
     public Room getExit(String theExit)
     {
-        Room exit = null;
-        if (rooms.containsKey(theExit))
-        {
-            exit = rooms.get(theExit);
-        }
-        return exit;        
+        return rooms.get(theExit);
     }
     
     /**
