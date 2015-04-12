@@ -90,7 +90,7 @@ public class Room
         Set<String> exits = rooms.keySet();
         for (String exit : exits)
         {
-            theExits += exit;
+            theExits += exit + " ";
         }        
         return theExits;
     }
@@ -111,7 +111,6 @@ public class Room
      */
     public String getLongDescription()
     {
-        String roomInfo = null;
-        return roomInfo = "You are in the " + getDescription() + "\n Exits: " + getExitString();
+        return "Estás en " + getDescription() + "\n Salidas: " + getExitString();
     }
 }

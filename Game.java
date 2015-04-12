@@ -89,7 +89,7 @@ public class Game
      */
     private void printLocationInfo()
     {
-        currentRoom.getLongDescription();
+        System.out.println(currentRoom.getLongDescription());
     }    
     
     /**
@@ -147,9 +147,8 @@ public class Game
             System.out.println("Ir a donde?");
             return;
         }
-
-        String direction = command.getSecondWord();        
-        Room nextRoom = currentRoom.getExit(direction);        
+  
+        Room nextRoom = currentRoom.getExit(command.getSecondWord());        
         if (nextRoom == null) {
             System.out.println("No hay puerta!");
         }
