@@ -35,13 +35,13 @@ public class Game
     private void createRooms()
     {
         Room entrada, recepcion, salaDeReuniones, servicios, recursosHumanos, despachoDelDirector, salaDeProyecciones;
-        entrada = new Room("en la entrada del edificio");
-        recepcion = new Room("en recepción");
-        salaDeReuniones = new Room("en la sala de reuniones");
-        servicios = new Room("en los servicios");
-        recursosHumanos = new Room("en recursos humanos");
-        despachoDelDirector = new Room("en el despacho del director");
-        salaDeProyecciones = new Room ("en la sala de proyecciones");
+        entrada = new Room("en la entrada del edificio", "obj1", 20.5F);
+        recepcion = new Room("en recepción", "obj2", 10.5F);
+        salaDeReuniones = new Room("en la sala de reuniones", "obj3", 25.5F);
+        servicios = new Room("en los servicios", "obj4", 30.5F);
+        recursosHumanos = new Room("en recursos humanos", "obj5", 40.5F);
+        despachoDelDirector = new Room("en el despacho del director", "obj6", 12.5F);
+        salaDeProyecciones = new Room ("en la sala de proyecciones", "obj7", 3.5F);
         
         entrada.setExit("north", recepcion);
         
