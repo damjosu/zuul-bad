@@ -38,21 +38,7 @@ public class Room
      */
     public void setExit(String direction, Room neighbor)
     {
-        switch (direction)
-        {
-            case "north" : rooms.put("north", neighbor);
-            break;
-            case "east" : rooms.put("east", neighbor);
-            break;
-            case "south" : rooms.put("south", neighbor);
-            break;
-            case "west" : rooms.put("west", neighbor);
-            break;
-            case "southEast" : rooms.put("southEast", neighbor);
-            break;
-            case "northWest" : rooms.put("northWest", neighbor);
-            break;
-        }   
+        rooms.put(direction, neighbor);
     }
 
     public Room getExit(String theExit)
