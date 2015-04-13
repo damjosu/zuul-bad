@@ -148,7 +148,7 @@ public class Game
         System.out.println("Estás perdido, solo");
         System.out.println("en la oficina");
         System.out.println();
-        parser.getCommands().showAll();
+        parser.showAllCommands();
     }
 
     /** 
