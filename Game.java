@@ -129,6 +129,9 @@ public class Game
         else if (commandWord.equals("quit")) {
             wantToQuit = quit(command);
         }
+        else if (commandWord.equals("look")) {
+            System.out.println(currentRoom.getLongDescription());
+        }
 
         return wantToQuit;
     }
@@ -146,7 +149,7 @@ public class Game
         System.out.println("en la oficina");
         System.out.println();
         System.out.println("Los comandos son:");
-        System.out.println("   go quit help");
+        System.out.println("   go quit help look");
     }
 
     /** 
