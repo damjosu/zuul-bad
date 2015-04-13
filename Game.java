@@ -148,8 +148,7 @@ public class Game
         System.out.println("Estás perdido, solo");
         System.out.println("en la oficina");
         System.out.println();
-        System.out.println("Los comandos son:");
-        System.out.println("   go quit help look");
+        parser.showAllCommands();
     }
 
     /** 
