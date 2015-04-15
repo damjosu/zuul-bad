@@ -158,7 +158,13 @@ public class Game
         }
         else if (commandWord.equals("back"))
         {
-            currentRoom = rooms.pop();
+            if (!rooms.empty())
+            {
+                currentRoom = rooms.pop();
+            }     
+            {
+                System.out.println("No puedes volver a la nada");
+            }
             printLocationInfo();
         }
 
