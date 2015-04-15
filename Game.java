@@ -162,6 +162,7 @@ public class Game
             {
                 currentRoom = rooms.pop();
             }     
+            else
             {
                 System.out.println("No puedes volver a la nada");
             }
