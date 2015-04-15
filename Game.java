@@ -158,7 +158,7 @@ public class Game
         }
         else if (commandWord.equals("back"))
         {
-            currentRoom = rooms.peek();
+            currentRoom = rooms.pop();
             printLocationInfo();
         }
 
