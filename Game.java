@@ -160,6 +160,7 @@ public class Game
         else if (commandWord.equals("back"))
         {
             currentRoom = rooms.peek();
+            printLocationInfo();
         }
 
         return wantToQuit;
