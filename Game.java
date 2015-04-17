@@ -115,17 +115,9 @@ public class Game
         System.out.println("Bienvenido a The Office!");
         System.out.println("Escribe 'help' si necesitas ayuda.");
         System.out.println();        
-        printLocationInfo();
+        player.look();
     }
-    
-    /**
-     * Checks the available exits.
-     */
-    private void printLocationInfo()
-    {
-        System.out.println(player.getCurrentRoom().getLongDescription());
-    }    
-    
+
     /**
      * Given a command, process (that is: execute) the command.
      * @param command The command to be processed.
@@ -158,7 +150,7 @@ public class Game
         else if (commandWord.equals("back"))
         {
             player.back();
-            printLocationInfo();
+            player.look();
         }
 
         return wantToQuit;
@@ -191,8 +183,8 @@ public class Game
             return;
        }
        
-       player.goRoom(command);
-       printLocationInfo();
+       player.goRoom(command.getSecondWord());
+       player.look();
     }
 
     /** 
