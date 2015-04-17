@@ -38,31 +38,31 @@ public class Game
         Room entrada, recepcion, salaDeReuniones, servicios, recursosHumanos, despachoDelDirector, salaDeProyecciones;
         
         entrada = new Room("en la entrada del edificio");
-        entrada.addItem(new Item("Jarrón", 10.5F));
+        entrada.addItem(new Item("Jarrón", 10.5F, true));
         
         recepcion = new Room("en recepción");
-        recepcion.addItem(new Item("telefono", 3.2F));
-        recepcion.addItem(new Item("escritorio", 30F));
+        recepcion.addItem(new Item("telefono", 3.2F, true));
+        recepcion.addItem(new Item("escritorio", 30F, false));
         
         salaDeReuniones = new Room("en la sala de reuniones");
-        salaDeReuniones.addItem(new Item("Silla", 4.3F));
-        salaDeReuniones.addItem(new Item("Cuadro", 1.3F));
+        salaDeReuniones.addItem(new Item("Silla", 4.3F, true));
+        salaDeReuniones.addItem(new Item("Cuadro", 1.3F, false));
         
         servicios = new Room("en los servicios");
-        servicios.addItem(new Item("Ventana", 10.2F));
-        servicios.addItem(new Item("Inhodoro", 15.6F));
+        servicios.addItem(new Item("Ventana", 10.2F, true));
+        servicios.addItem(new Item("Inhodoro", 15.6F, false));
         
         recursosHumanos = new Room("en recursos humanos");
-        recursosHumanos.addItem(new Item("PC", 3.5F));
-        recursosHumanos.addItem(new Item("Reclamaciones", 1.3F));
+        recursosHumanos.addItem(new Item("PC", 3.5F, true));
+        recursosHumanos.addItem(new Item("Reclamaciones", 1.3F, false));
 
         despachoDelDirector = new Room("en el despacho del director");
-        despachoDelDirector.addItem(new Item("Plasma", 4.3F));
-        despachoDelDirector.addItem(new Item("Puros", 0.2F));
+        despachoDelDirector.addItem(new Item("Plasma", 4.3F, true));
+        despachoDelDirector.addItem(new Item("Puros", 0.2F, false));
         
         salaDeProyecciones = new Room ("en la sala de proyecciones");
-        salaDeProyecciones.addItem(new Item("proyector", 4.1F));
-        salaDeProyecciones.addItem(new Item("Pantalla", 3.2F));
+        salaDeProyecciones.addItem(new Item("proyector", 4.1F, true));
+        salaDeProyecciones.addItem(new Item("Pantalla", 3.2F, false));
         
         entrada.setExit("north", recepcion);
         

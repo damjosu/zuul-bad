@@ -7,15 +7,38 @@ public class Player
 {
     private Room currentRoom;
     private Stack<Room> rooms;
+    private float carryWeight;
+    private float capacity;
+    private String name;
+    private ArrayList<Item> items;
     /**
      * Constructor for objects of class Player
      */
-    public Player()
+    public Player(String name, float capacity)
     {
         currentRoom = null;
         rooms = new Stack<>();
+        items = new ArrayList<>();
+        this.name = name;
+        carryWeight = 0;
+        this.capacity = capacity;
     }
     
+    public void take(String item)
+    {
+        if ((carryWeight + item.getWeight())<= capacity)
+        {
+            items.add(currentRoom.removeItem(item));
+        }        
+    }
+    
+    public void drop()
+    {
+        if (!items.empty())
+        {
+            
+        }
+    }
     public void setCurrentRoom(Room room)
     {
         currentRoom = room;

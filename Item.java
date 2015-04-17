@@ -9,14 +9,16 @@ public class Item
 {
     private String name;
     private float weight;
+    private boolean carryAble;
 
     /**
      * Constructor for objects of class Item
      */
-    public Item(String name, float weight)
+    public Item(String name, float weight, boolean carryAble)
     {
         this.name = name;
         this.weight = weight;
+        this.carryAble = carryAble;
     }
     
     public String getName()
@@ -29,13 +31,13 @@ public class Item
         return weight;
     }
     
+    public boolean carryAble()
+    {
+        return carryAble();
+    }
+        
     public String itemToString()
     { 
         return name + " pesa: " + weight + "Kg";
     }
-    
-//     public boolean carryAble()
-//     {
-//         return carryAble();
-//     }
 }

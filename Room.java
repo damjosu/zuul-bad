@@ -79,6 +79,11 @@ public class Room
         return description;
     }
     
+    public Item removeItem(String item)
+    {
+        return items.remove(items.indexOf(item));
+    }
+    
     private String allItemsToString()
     {
         String allItems = "";
