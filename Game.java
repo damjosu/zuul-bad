@@ -19,16 +19,15 @@ import java.util.Stack;
 public class Game 
 {
     private Parser parser;
-    private Room currentRoom;
-    private Stack<Room> rooms; 
+    private Player player;
     /**
      * Create the game and initialise its internal map.
      */
     public Game() 
     {
-        createRooms();
         parser = new Parser();
-        rooms = new Stack<>();
+        player = new Player();
+        createRooms();
     }
 
     /**
@@ -86,7 +85,7 @@ public class Game
         salaDeProyecciones.setExit("southEast", salaDeReuniones);
         salaDeProyecciones.setExit("west", despachoDelDirector);
         
-        currentRoom = entrada;  
+        player.setCurrentRoom(entrada);
     }
 
     /**
@@ -124,7 +123,7 @@ public class Game
      */
     private void printLocationInfo()
     {
-        System.out.println(currentRoom.getLongDescription());
+        System.out.println(player.getCurrentRoom().getLongDescription());
     }    
     
     /**
@@ -151,21 +150,14 @@ public class Game
             wantToQuit = quit(command);
         }
         else if (commandWord.equals("look")) {
-            System.out.println(currentRoom.getLongDescription());
+            player.look();
         }
         else if (commandWord.equals("eat")) {
-            System.out.println("You have eaten now and you are not hungry any more");
+            player.eat();
         }
         else if (commandWord.equals("back"))
         {
-            if (!rooms.empty())
-            {
-                currentRoom = rooms.pop();
-            }     
-            else
-            {
-                System.out.println("No puedes volver a la nada");
-            }
+            player.back();
             printLocationInfo();
         }
 
@@ -193,21 +185,14 @@ public class Game
      */
     private void goRoom(Command command) 
     {
-        if(!command.hasSecondWord()) {
+       if(!command.hasSecondWord()) {
             // if there is no second word, we don't know where to go...
             System.out.println("Ir a donde?");
             return;
-        }
-  
-        Room nextRoom = currentRoom.getExit(command.getSecondWord());        
-        if (nextRoom == null) {
-            System.out.println("No hay puerta!");
-        }
-        else {
-            rooms.push(currentRoom);
-            currentRoom = nextRoom;
-            printLocationInfo();            
-        }
+       }
+       
+       player.goRoom(command);
+       printLocationInfo();
     }
 
     /** 

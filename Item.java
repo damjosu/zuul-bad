@@ -33,4 +33,9 @@ public class Item
     { 
         return name + " pesa: " + weight + "Kg";
     }
+    
+//     public boolean carryAble()
+//     {
+//         return carryAble();
+//     }
 }
