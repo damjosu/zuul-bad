@@ -1,43 +1,70 @@
-
 /**
- * Write a description of class Item here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
+ * Clase Item
+ * @author (Josu) 
+ * @version (18/04/205)
  */
 public class Item
 {
-    private String name;
+    // Numero identificador del objeto
+    private int ID;
+    // Descripción del objeto
+    private String description;
+    // Peso del objeto
     private float weight;
-    private boolean carryAble;
+    // Si el objeto se puede llevar o no
+    private boolean carryAble;    
+    // Valor inicial de la autonumeración de objetos
+    private static int i = 1;
 
     /**
-     * Constructor for objects of class Item
+     * Constructor de la clase Item.
      */
-    public Item(String name, float weight, boolean carryAble)
+    public Item(String description, float weight, boolean carryAble)
     {
-        this.name = name;
+        this.description = description;
         this.weight = weight;
         this.carryAble = carryAble;
+        ID = i;
+        i++;
     }
     
-    public String getName()
+    /**
+     * @return true si el objeto se puede coger, y false en caso contrario.
+     */
+    public boolean carryAble()
     {
-        return name;
+        return carryAble();
     }
     
+    /**
+     * @return la ID del objeto.
+     */
+    public int getID()
+    {
+        return ID;
+    }
+    
+    /**
+     * @return la descripción del objeto.
+     */
+    public String getDescription()
+    {
+        return description;
+    }
+    
+    /**
+     * @return el peso del objeto en Kg.
+     */
     public float getWeight()
     {
         return weight;
     }
     
-    public boolean carryAble()
-    {
-        return carryAble();
-    }
-        
+    /**
+     * @return una cadena con la descripción y peso del objeto en Kg.
+     */
     public String itemToString()
     { 
-        return name + " pesa: " + weight + "Kg";
+        return description + " pesa: " + weight + "Kg";
     }
 }

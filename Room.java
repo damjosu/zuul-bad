@@ -17,10 +17,13 @@ import java.util.Set;
  */
 public class Room 
 {
+    // Descripción de la habitación.
     private String description;
+    // Salidas de la habitación y la habitación a la que dan.
     private HashMap<String, Room> rooms;
+    // Objetos que hay en la habitación.
     private ArrayList<Item> items;
-
+    
     /**
      * Create a room described "description". Initially, it has
      * no exits. "description" is something like "a kitchen" or
@@ -34,6 +37,10 @@ public class Room
         items = new ArrayList<>();
     }
     
+    /**
+     * Añade un objeto a la habitación.
+     * @param item el objeto a añadir.
+     */
     public void addItem(Item item)
     {
         items.add(item);
@@ -48,7 +55,11 @@ public class Room
     {
         rooms.put(direction, neighbor);
     }
-
+    
+    /**
+     * @param theExit dirección de la salida.
+     * @return la habitación que esta en la salida especificada por parametro.
+     */
     public Room getExit(String theExit)
     {
         return rooms.get(theExit);
@@ -79,11 +90,32 @@ public class Room
         return description;
     }
     
-    public Item removeItem(String item)
+    /**
+     * Elimina un objeto de la habitación.
+     * @ID la ID del objeto a eliminar.
+     * @return el objeto eliminado.
+     */
+    public Item removeItem(int ID)
     {
-        return items.remove(items.indexOf(item));
+        int i = 0;
+        Item removedItem = null;
+        boolean match = false;
+        while (i < items.size() && !match)
+        {
+            if (items.get(i).getID() == ID)
+            {
+                match = true;
+                removedItem = items.get(i);
+                items.remove(i);
+            }
+            i++;
+        }
+        return removedItem;
     }
     
+    /**
+     * @return una cadena con cada objeto con su descripción y peso en Kg.
+     */
     private String allItemsToString()
     {
         String allItems = "";

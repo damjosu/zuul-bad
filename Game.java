@@ -26,7 +26,7 @@ public class Game
     public Game() 
     {
         parser = new Parser();
-        player = new Player();
+        player = new Player("Josu", 50.3F);
         createRooms();
     }
 
@@ -182,7 +182,6 @@ public class Game
             System.out.println("Ir a donde?");
             return;
        }
-       
        player.goRoom(command.getSecondWord());
        player.look();
     }
