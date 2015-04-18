@@ -36,22 +36,22 @@ public class Game
     private void createRooms()
     {
         Room entrada, recepcion, salaDeReuniones, servicios, recursosHumanos, despachoDelDirector, salaDeProyecciones;
-        
+
         entrada = new Room("en la entrada del edificio");
         entrada.addItem(new Item("Jarrón", 10.5F, true));
-        
+
         recepcion = new Room("en recepción");
         recepcion.addItem(new Item("telefono", 3.2F, true));
         recepcion.addItem(new Item("escritorio", 30F, false));
-        
+
         salaDeReuniones = new Room("en la sala de reuniones");
         salaDeReuniones.addItem(new Item("Silla", 4.3F, true));
         salaDeReuniones.addItem(new Item("Cuadro", 1.3F, false));
-        
+
         servicios = new Room("en los servicios");
         servicios.addItem(new Item("Ventana", 10.2F, true));
         servicios.addItem(new Item("Inhodoro", 15.6F, false));
-        
+
         recursosHumanos = new Room("en recursos humanos");
         recursosHumanos.addItem(new Item("PC", 3.5F, true));
         recursosHumanos.addItem(new Item("Reclamaciones", 1.3F, false));
@@ -59,32 +59,32 @@ public class Game
         despachoDelDirector = new Room("en el despacho del director");
         despachoDelDirector.addItem(new Item("Plasma", 4.3F, true));
         despachoDelDirector.addItem(new Item("Puros", 0.2F, false));
-        
+
         salaDeProyecciones = new Room ("en la sala de proyecciones");
         salaDeProyecciones.addItem(new Item("proyector", 4.1F, true));
         salaDeProyecciones.addItem(new Item("Pantalla", 3.2F, false));
-        
+
         entrada.setExit("north", recepcion);
-        
+
         recepcion.setExit("east", salaDeReuniones);
         recepcion.setExit("south", entrada);
         recepcion.setExit("west", recursosHumanos);
-        
+
         salaDeReuniones.setExit("north", servicios);
         salaDeReuniones.setExit("west", recepcion);
         salaDeReuniones.setExit("northWest", salaDeProyecciones);
-        
+
         servicios.setExit("south", salaDeReuniones);
-        
+
         recursosHumanos.setExit("north", despachoDelDirector);
         recursosHumanos.setExit("east", recepcion);
-        
+
         despachoDelDirector.setExit("east", salaDeProyecciones);
         despachoDelDirector.setExit("south", recursosHumanos);
-        
+
         salaDeProyecciones.setExit("southEast", salaDeReuniones);
         salaDeProyecciones.setExit("west", despachoDelDirector);
-        
+
         player.setCurrentRoom(entrada);
     }
 
@@ -97,7 +97,7 @@ public class Game
 
         // Enter the main command loop.  Here we repeatedly read commands and
         // execute them until the game is over.
-                
+
         boolean finished = false;
         while (! finished) {
             Command command = parser.getCommand();
@@ -116,6 +116,7 @@ public class Game
         System.out.println("Escribe 'help' si necesitas ayuda.");
         System.out.println();        
         player.look();
+        player.showCurrentInventory();
     }
 
     /**
@@ -151,8 +152,72 @@ public class Game
         {
             player.back();
             player.look();
+            player.showCurrentInventory();
         }
-
+        else if(commandWord.equals("inventory"))
+        {
+            player.showCurrentInventory();
+        }
+        else if (commandWord.equals("take"))
+        {
+            if(command.hasSecondWord()) 
+            {
+                int i = 0;
+                boolean match = false;     
+                while (i < player.getCurrentRoom().getNumberOfRoomItems() && !match)
+                {
+                    if (player.getCurrentRoom().getItem(i).getID() == Integer.parseInt(command.getSecondWord()))
+                    {
+                        match = true;
+                        player.take(player.getCurrentRoom().getItem(i));
+                    }
+                    i++;
+                }
+                if (!match)
+                {
+                    System.out.println("Ese objeto no está en la habitación");
+                }
+                else
+                {
+                    player.look();
+                    player.showCurrentInventory();
+                }
+            }
+            else
+            {
+                System.out.println("¿Coger el qué?");
+            }
+        }
+        else if (commandWord.equals("drop"))
+        {
+            if(command.hasSecondWord()) 
+            {
+                int i = 0;
+                boolean match = false;     
+                while (i < player.getNumberOfInventoryItems() && !match)
+                {
+                    if (player.getItem(i).getID() == Integer.parseInt(command.getSecondWord()))
+                    {
+                        match = true;
+                        player.getCurrentRoom().addItem(player.drop(player.getItem(i)));
+                    }
+                    i++;
+                }
+                if (!match)
+                {
+                    System.out.println("No tienes ese objeto");
+                }
+                else
+                {
+                    player.look();
+                    player.showCurrentInventory();
+                }
+            }
+            else
+            {
+                System.out.println("¿Soltar el qué?");
+            }
+        }
         return wantToQuit;
     }
 
@@ -177,13 +242,13 @@ public class Game
      */
     private void goRoom(Command command) 
     {
-       if(!command.hasSecondWord()) {
+        if(!command.hasSecondWord()) {
             // if there is no second word, we don't know where to go...
             System.out.println("Ir a donde?");
             return;
-       }
-       player.goRoom(command.getSecondWord());
-       player.look();
+        }
+        player.goRoom(command.getSecondWord());
+        player.look();
     }
 
     /** 
@@ -194,7 +259,7 @@ public class Game
     private boolean quit(Command command) 
     {
         if(command.hasSecondWord()) {
-            System.out.println("Salir que?");
+            System.out.println("¿Salir qué?");
             return false;
         }
         else {

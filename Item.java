@@ -65,6 +65,6 @@ public class Item
      */
     public String itemToString()
     { 
-        return description + " pesa: " + weight + "Kg";
+        return description + "(" + ID + ") pesa: " + weight + "Kg";
     }
 }

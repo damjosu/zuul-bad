@@ -47,6 +47,23 @@ public class Room
     }
     
     /**
+     * @param location el espacio que ocupa el objeto en la habitación.
+     * @return el objeto en la localización especificado.
+     */
+    public Item getItem(int location)
+    {
+        return items.get(location);
+    }
+    
+    /**
+     * @return el numero de objetos en el inventario.
+     */
+    public int getNumberOfRoomItems()
+    {
+        return items.size();
+    }
+    
+    /**
      * Define an exit from this room.
      * @param direction The direction of the exit.
      * @param neighbor The room in the given direction.
@@ -134,6 +151,15 @@ public class Room
      */
     public String getLongDescription()
     {
-        return "Estás en " + getDescription() + "\n Hay un/os: " + allItemsToString() + "\n Salidas: " + getExitString();
+        String longDescription;
+        if (items.isEmpty())
+        {
+            longDescription = "Estás en " + getDescription() + ", no hay objetos\nSalidas: " + getExitString();
+        }
+        else
+        {
+            longDescription = "Estás en " + getDescription() + ", se hallan los siguientes objetos:\n" + allItemsToString() + "\nSalidas: " + getExitString();
+        }        
+        return longDescription;
     }
 }

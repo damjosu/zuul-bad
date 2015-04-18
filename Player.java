@@ -10,7 +10,7 @@ public class Player
     // Nombre del jugador.
     private String name;
     // ID del jugador.
-    private String ID;
+    private int ID;
     // Capacidad total en Kg que puede llevar el jugador.
     private float capacity;
     // Peso que lleva el jugador.
@@ -21,6 +21,8 @@ public class Player
     private Room currentRoom;
     // Mapa relativo a la habitación principal.
     private Stack<Room> map;
+    // Valor inicial de la autonumeración de jugadores.
+    private static int p = 1;
     /**
      * Constructor de la clase Player.
      */
@@ -32,6 +34,25 @@ public class Player
         carryWeight = 0;
         this.name = name;        
         this.capacity = capacity;
+        ID = p;
+        p++;
+    }
+    
+    /**
+     * @param slot el hueco del inventario.
+     * @return el objeto en el hueco especificado.
+     */
+    public Item getItem(int slot)
+    {
+        return inventory.get(slot);
+    }
+    
+    /**
+     * @return el numero de objetos en el inventario.
+     */
+    public int getNumberOfInventoryItems()
+    {
+        return inventory.size();
     }
     
     /**
@@ -53,14 +74,14 @@ public class Player
      * @ID el objeto a soltar.
      * 
      */
-    public Item drop(int ID)
+    public Item drop(Item item)
     {
         int i = 0;
         Item removedItem = null;
         boolean match = false;
         while (i < inventory.size() && !match)
         {
-            if (inventory.get(i).getID() == ID)
+            if (inventory.get(i) == item)
             {
                 match = true;
                 removedItem = inventory.get(i);
@@ -69,6 +90,26 @@ public class Player
             i++;
         }
         return removedItem;
+    }
+    
+    /**
+     * Muestra el inventario actual del jugador.
+     */
+    public void showCurrentInventory()
+    {
+        if (!inventory.isEmpty())
+        {
+            String currentInventory = "En el inventario tienes: " + inventory.get(0).itemToString();
+            for (int i = 1; i < inventory.size(); i++)
+            {
+                currentInventory += ", " + inventory.get(i).itemToString();
+            }
+            System.out.println(currentInventory);
+        }
+        else 
+        {
+            System.out.println("El inventario está vacio");
+        }
     }
     
     /**
@@ -104,11 +145,6 @@ public class Player
         return map.empty();
     }    
 
-    //     public Room removeRoomFromMap()
-    //     {
-    //         return map.pop();
-    //     }
-    
     /**
      * Impreme un mensaje informando de que el jugador ha comido.
      */
