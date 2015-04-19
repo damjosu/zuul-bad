@@ -56,16 +56,51 @@ public class Player
     }
     
     /**
-     * Comprueba que el objeto a coger tenga un peso que pueda soportar, en
-     * caso de poder cogerlo lo añade al inventario y desaparece de la habitación.
+     * @return el peso actual de todos los objetos en el inventario.
+     */
+    public void showCarryWeight()
+    {
+        if (carryWeight == 0)
+        {
+            System.out.println("Te sientes ligero");
+        }
+        else
+        {
+            System.out.println("Llevas " + carryWeight + " Kg");
+        }   
+    }
+    
+    /**
+     * Comprueba que el objeto a coger tenga un peso que pueda soportar, y sea un objeto que se 
+     * pueda transportar, en caso de poder cogerlo lo añade al inventario y desaparece de la habitación.
      * @param item el objeto a coger.
+     * @return true si ha cogido el objeto, false en caso contrario.
      */
     public void take(Item item)
     {
-        if ((carryWeight + item.getWeight())<= capacity)
+        if (carryWeight == capacity)
         {
-            inventory.add(currentRoom.removeItem(item.getID()));
-        }        
+            System.out.println("¡No puedes llevar más!");
+        }
+        else
+        {
+            if (item.carryAble())
+            {
+                if ((carryWeight + item.getWeight()) <= capacity)
+                {
+                    inventory.add(currentRoom.removeItem(item.getID()));
+                    carryWeight += item.getWeight();
+                }   
+                else
+                {
+                    System.out.println("El " + item.getDescription() + " pesa demasiado, librate de algunos objetos primero.");
+                }
+            }
+            else
+            {
+                System.out.println("¡Animal! no te puedes llevar eso");
+            } 
+        }
     }
     
     /**
@@ -97,18 +132,17 @@ public class Player
      */
     public void showCurrentInventory()
     {
-        if (!inventory.isEmpty())
+        if (inventory.isEmpty())
         {
-            String currentInventory = "En el inventario tienes: " + inventory.get(0).itemToString();
-            for (int i = 1; i < inventory.size(); i++)
-            {
-                currentInventory += ", " + inventory.get(i).itemToString();
-            }
-            System.out.println(currentInventory);
+            System.out.println("El inventario está vacio");
         }
         else 
         {
-            System.out.println("El inventario está vacio");
+            System.out.println("Inventario:");
+            for (int i = 0; i < inventory.size(); i++)
+            {
+                System.out.println(inventory.get(i).itemToString());
+            }
         }
     }
     
@@ -174,7 +208,8 @@ public class Player
         }     
         else
         {
-            System.out.println("No puedes volver a la nada");
+            System.out.println();
+            System.out.println("No puedes retroceder");
         }
     }
     

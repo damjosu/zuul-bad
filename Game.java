@@ -38,31 +38,58 @@ public class Game
         Room entrada, recepcion, salaDeReuniones, servicios, recursosHumanos, despachoDelDirector, salaDeProyecciones;
 
         entrada = new Room("en la entrada del edificio");
-        entrada.addItem(new Item("Jarrón", 10.5F, true));
+        entrada.addItem(new Item("Jarrón", 2.5F, true));
+        entrada.addItem(new Item("Jarrón", 2.5F, true));
+        entrada.addItem(new Item("Sofá", 50.3F, false));
 
         recepcion = new Room("en recepción");
-        recepcion.addItem(new Item("telefono", 3.2F, true));
+        recepcion.addItem(new Item("Silla", 3.5F, true));
+        recepcion.addItem(new Item("telefono", 1.2F, true));
+        recepcion.addItem(new Item("PC", 6.3F, true));
+        recepcion.addItem(new Item("Impresora", 3.7F, true));
         recepcion.addItem(new Item("escritorio", 30F, false));
 
         salaDeReuniones = new Room("en la sala de reuniones");
-        salaDeReuniones.addItem(new Item("Silla", 4.3F, true));
-        salaDeReuniones.addItem(new Item("Cuadro", 1.3F, false));
+        salaDeReuniones.addItem(new Item("Silla", 3.5F, true));
+        salaDeReuniones.addItem(new Item("Silla", 3.5F, true));
+        salaDeReuniones.addItem(new Item("Silla", 3.5F, true));
+        salaDeReuniones.addItem(new Item("Mesa", 30.3F, false));
+        salaDeReuniones.addItem(new Item("Microfono", 0.2F, true));
 
         servicios = new Room("en los servicios");
-        servicios.addItem(new Item("Ventana", 10.2F, true));
-        servicios.addItem(new Item("Inhodoro", 15.6F, false));
+        servicios.addItem(new Item("Escobilla", 0.7F, true));
+        servicios.addItem(new Item("Papel higienico", 0.2F, true));
+        servicios.addItem(new Item("Ventana", 10.2F, false));
+        servicios.addItem(new Item("Inhodoro", 25.6F, false));
+        servicios.addItem(new Item("Lavabo", 10.6F, false));
+        servicios.addItem(new Item("Espejo", 7.6F, true));
 
         recursosHumanos = new Room("en recursos humanos");
+        recursosHumanos.addItem(new Item("Silla", 3.5F, true));
         recursosHumanos.addItem(new Item("PC", 3.5F, true));
-        recursosHumanos.addItem(new Item("Reclamaciones", 1.3F, false));
+        recursosHumanos.addItem(new Item("Impresora", 3.7F, true));
+        recursosHumanos.addItem(new Item("Reclamaciones", 1.3F, true));
+        recursosHumanos.addItem(new Item("Ficheros", 35.4F, false));
 
         despachoDelDirector = new Room("en el despacho del director");
+        despachoDelDirector.addItem(new Item("telefono", 1.2F, true));
         despachoDelDirector.addItem(new Item("Plasma", 4.3F, true));
-        despachoDelDirector.addItem(new Item("Puros", 0.2F, false));
+        despachoDelDirector.addItem(new Item("Puros", 0.2F, true));
+        despachoDelDirector.addItem(new Item("Diploma", 2.5F, true));
+        despachoDelDirector.addItem(new Item("Silla", 3.5F, true));
+        despachoDelDirector.addItem(new Item("Foto familiar", 0.5F, true));
+        despachoDelDirector.addItem(new Item("Portatil", 2.5F, true));
+        despachoDelDirector.addItem(new Item("Sofá", 50.3F, false));
 
         salaDeProyecciones = new Room ("en la sala de proyecciones");
+        recepcion.addItem(new Item("Silla", 3.5F, true));
+        recepcion.addItem(new Item("Silla", 3.5F, true));
+        recepcion.addItem(new Item("Silla", 3.5F, true));
+        recepcion.addItem(new Item("Silla", 3.5F, true));
+        recepcion.addItem(new Item("Silla", 3.5F, true));
+        recepcion.addItem(new Item("Silla", 3.5F, true));
         salaDeProyecciones.addItem(new Item("proyector", 4.1F, true));
-        salaDeProyecciones.addItem(new Item("Pantalla", 3.2F, false));
+        salaDeProyecciones.addItem(new Item("Pantalla para proyector", 8.2F, false));
 
         entrada.setExit("north", recepcion);
 
@@ -103,6 +130,7 @@ public class Game
             Command command = parser.getCommand();
             finished = processCommand(command);
         }
+        System.out.println();
         System.out.println("Gracias por jugar. Hasta la vista.");
     }
 
@@ -134,6 +162,7 @@ public class Game
 
         String commandWord = command.getCommandWord();
         if (commandWord.equals("help")) {
+            System.out.println();
             printHelp();
         }
         else if (commandWord.equals("go")) {
@@ -143,27 +172,36 @@ public class Game
             wantToQuit = quit(command);
         }
         else if (commandWord.equals("look")) {
+            System.out.println();
             player.look();
         }
         else if (commandWord.equals("eat")) {
+            System.out.println();
             player.eat();
         }
         else if (commandWord.equals("back"))
         {
             player.back();
+            System.out.println();
             player.look();
-            player.showCurrentInventory();
         }
         else if(commandWord.equals("inventory"))
         {
+            System.out.println();
             player.showCurrentInventory();
+        }
+        else if(commandWord.equals("weight"))
+        {
+            System.out.println();
+            player.showCarryWeight();
         }
         else if (commandWord.equals("take"))
         {
+            System.out.println();
             if(command.hasSecondWord()) 
             {
                 int i = 0;
-                boolean match = false;     
+                boolean match = false;   
                 while (i < player.getCurrentRoom().getNumberOfRoomItems() && !match)
                 {
                     if (player.getCurrentRoom().getItem(i).getID() == Integer.parseInt(command.getSecondWord()))
@@ -179,7 +217,6 @@ public class Game
                 }
                 else
                 {
-                    player.look();
                     player.showCurrentInventory();
                 }
             }
@@ -190,6 +227,7 @@ public class Game
         }
         else if (commandWord.equals("drop"))
         {
+            System.out.println();
             if(command.hasSecondWord()) 
             {
                 int i = 0;
@@ -209,7 +247,6 @@ public class Game
                 }
                 else
                 {
-                    player.look();
                     player.showCurrentInventory();
                 }
             }
@@ -248,6 +285,7 @@ public class Game
             return;
         }
         player.goRoom(command.getSecondWord());
+        System.out.println();
         player.look();
     }
 

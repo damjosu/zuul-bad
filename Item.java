@@ -33,7 +33,7 @@ public class Item
      */
     public boolean carryAble()
     {
-        return carryAble();
+        return carryAble;
     }
     
     /**
