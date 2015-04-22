@@ -9,20 +9,18 @@ public class Player
 {
     // Nombre del jugador.
     private String name;
-    // ID del jugador.
-    private int ID;
+    // id del jugador.
+    private int id;
     // Capacidad total en Kg que puede llevar el jugador.
     private float capacity;
     // Peso que lleva el jugador.
-    private float carryWeight;
-    // Inventario con los objetos que tiene el jugador.
     private ArrayList<Item> inventory;
     // Habitación en la que se encuentra el jugador.
     private Room currentRoom;
     // Mapa relativo a la habitación principal.
     private Stack<Room> map;
     // Valor inicial de la autonumeración de jugadores.
-    private static int p = 1;
+    private static int p = 0;
     /**
      * Constructor de la clase Player.
      */
@@ -31,13 +29,12 @@ public class Player
         map = new Stack<>();
         inventory = new ArrayList<>();
         currentRoom = null;
-        carryWeight = 0;
         this.name = name;        
         this.capacity = capacity;
-        ID = p;
+        id = p;
         p++;
     }
-    
+
     /**
      * @param slot el hueco del inventario.
      * @return el objeto en el hueco especificado.
@@ -46,91 +43,92 @@ public class Player
     {
         return inventory.get(slot);
     }
-    
+
     /**
-     * @return el numero de objetos en el inventario.
+     * @return el peso actual que lleva el jugador en Kg.
      */
-    public int getNumberOfInventoryItems()
+    public float carryWeight()
     {
-        return inventory.size();
-    }
-    
-    /**
-     * @return el peso actual de todos los objetos en el inventario.
-     */
-    public void showCarryWeight()
-    {
-        if (carryWeight == 0)
+        float carryWeight = 0;
+        for (Item item : inventory)
         {
-            System.out.println("Te sientes ligero");
+            carryWeight += item.getWeight();
         }
-        else
-        {
-            System.out.println("Llevas " + carryWeight + " Kg");
-        }   
+        return carryWeight;
     }
-    
+
     /**
      * Comprueba que el objeto a coger tenga un peso que pueda soportar, y sea un objeto que se 
      * pueda transportar, en caso de poder cogerlo lo añade al inventario y desaparece de la habitación.
-     * @param item el objeto a coger.
-     * @return true si ha cogido el objeto, false en caso contrario.
+     * @param id la id del objeto a coger.
      */
-    public void take(Item item)
+    public void take(int id)
     {
-        if (carryWeight == capacity)
+        if (carryWeight() == capacity) 
         {
             System.out.println("¡No puedes llevar más!");
         }
         else
         {
-            if (item.carryAble())
+            Item currentItem = currentRoom.itemSearch(id);
+            if (currentItem != null)
             {
-                if ((carryWeight + item.getWeight()) <= capacity)
+                if (currentItem.carryAble()) 
                 {
-                    inventory.add(currentRoom.removeItem(item.getID()));
-                    carryWeight += item.getWeight();
-                }   
+                    if ((carryWeight() + currentItem.getWeight()) <= capacity)
+                    {
+                        inventory.add(currentRoom.removeItem(id));
+                        System.out.println("Has cogido " + currentItem.getDescription() + " de " + currentRoom.getDescription() + " puedes llevar " + String.format("%.2f", Math.abs(capacity - carryWeight())) + "Kg más\n");
+                    }   
+                    else
+                    {
+                        System.out.println(currentItem.getDescription() + " pesa demasiado, solo puedes llevar " + String.format("%.2f", Math.abs(capacity - carryWeight())) + "Kg más");
+                    }
+                }
                 else
                 {
-                    System.out.println("El " + item.getDescription() + " pesa demasiado, librate de algunos objetos primero.");
-                }
+                    System.out.println("¡Animal! no te puedes llevar eso");
+                } 
             }
             else
             {
-                System.out.println("¡Animal! no te puedes llevar eso");
-            } 
+                System.out.println("Ese objeto no está en la habitación");
+            }
         }
     }
-    
+
     /**
      * Suelta un objeto que le pasas por parametro, lo elimina
      * del inventario y se deposita en la habitación.
-     * @ID el objeto a soltar.
-     * 
+     * @id la id del objeto a soltar.
+     * @return el objeto a soltar.
      */
-    public Item drop(Item item)
+    public void drop(int id)
     {
         int i = 0;
-        Item removedItem = null;
-        boolean match = false;
+        boolean match = false;     
         while (i < inventory.size() && !match)
         {
-            if (inventory.get(i) == item)
+            if (inventory.get(i).getId() == id)
             {
-                match = true;
-                removedItem = inventory.get(i);
-                inventory.remove(i);
+                String capacityLeft = String.format("%.2f", (capacity - carryWeight()));
+                System.out.println("Has dejado caer " + inventory.get(i).getDescription() + " en " + currentRoom.getDescription() + " puedes llevar " + capacityLeft + "Kg más");                
+                currentRoom.addItem(inventory.get(i));
+                inventory.remove(inventory.get(i));
+                match = true;                
             }
             i++;
         }
-        return removedItem;
+        if (!match)
+        {
+            System.out.println("No tienes ese objeto");
+        }
     }
-    
+
     /**
      * Muestra el inventario actual del jugador.
      */
-    public void showCurrentInventory()
+    public void showInventory()
     {
         if (inventory.isEmpty())
         {
@@ -145,7 +143,7 @@ public class Player
             }
         }
     }
-    
+
     /**
      * Establece la habitación actual en la que esta el jugador.
      * @param room la habitación a establecer.
@@ -154,30 +152,6 @@ public class Player
     {
         currentRoom = room;
     }
-    
-    /**
-     * @return la habitación actual del jugador.
-     */
-    public Room getCurrentRoom()
-    {
-        return currentRoom;
-    }
-    
-    /**
-     * Añade al mapa una habitación en la que ha estado el jugador.
-     */
-    public void roomYouWere(Room room)
-    {
-        map.push(room);
-    }
-    
-    /**
-     * @return true si no hay ninguna habitación en el mapa o false en caso contrario.
-     */
-    public boolean mapEmpty()
-    {
-        return map.empty();
-    }    
 
     /**
      * Impreme un mensaje informando de que el jugador ha comido.
@@ -186,7 +160,7 @@ public class Player
     {
         System.out.println("Acabas de comer y ya no tienes hambre");
     }
-    
+
     /**
      * Imprime un mensaje con la información de la habitación actual en
      * la que se encuentra el jugador.
@@ -195,24 +169,26 @@ public class Player
     {
         System.out.println(currentRoom.getLongDescription());
     }
-    
+
     /**
      * Vuelve a la habitación previa a la actual. 
      * Si no es posible te informa de ello.
      */
-    public void back()
+    public boolean back()
     {
-        if (!mapEmpty())
+        boolean back = false;
+        if (!map.isEmpty())
         {
             currentRoom = map.pop();
+            back = true;
         }     
         else
         {
-            System.out.println();
             System.out.println("No puedes retroceder");
         }
+        return back;
     }
-    
+
     /**
      * Lleva al jugador a otra habitación en la dirección especificada.
      * En caso de no haber salida en esa dirección te informa de ello.

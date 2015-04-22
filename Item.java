@@ -6,7 +6,7 @@
 public class Item
 {
     // Numero identificador del objeto
-    private int ID;
+    private int id;
     // Descripción del objeto
     private String description;
     // Peso del objeto
@@ -14,7 +14,7 @@ public class Item
     // Si el objeto se puede llevar o no
     private boolean carryAble;    
     // Valor inicial de la autonumeración de objetos
-    private static int i = 1;
+    private static int i = 0;
 
     /**
      * Constructor de la clase Item.
@@ -24,10 +24,10 @@ public class Item
         this.description = description;
         this.weight = weight;
         this.carryAble = carryAble;
-        ID = i;
+        id = i;
         i++;
     }
-    
+
     /**
      * @return true si el objeto se puede coger, y false en caso contrario.
      */
@@ -35,15 +35,15 @@ public class Item
     {
         return carryAble;
     }
-    
+
     /**
-     * @return la ID del objeto.
+     * @return la id del objeto.
      */
-    public int getID()
+    public int getId()
     {
-        return ID;
+        return id;
     }
-    
+
     /**
      * @return la descripción del objeto.
      */
@@ -51,7 +51,7 @@ public class Item
     {
         return description;
     }
-    
+
     /**
      * @return el peso del objeto en Kg.
      */
@@ -59,12 +59,12 @@ public class Item
     {
         return weight;
     }
-    
+
     /**
      * @return una cadena con la descripción y peso del objeto en Kg.
      */
     public String itemToString()
     { 
-        return description + "(" + ID + ") pesa: " + weight + "Kg";
+        return description + "(" + id + ") " + weight + "Kg";
     }
 }

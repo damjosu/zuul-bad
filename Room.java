@@ -23,7 +23,7 @@ public class Room
     private HashMap<String, Room> rooms;
     // Objetos que hay en la habitación.
     private ArrayList<Item> items;
-    
+
     /**
      * Create a room described "description". Initially, it has
      * no exits. "description" is something like "a kitchen" or
@@ -36,33 +36,7 @@ public class Room
         rooms = new HashMap<>();
         items = new ArrayList<>();
     }
-    
-    /**
-     * Añade un objeto a la habitación.
-     * @param item el objeto a añadir.
-     */
-    public void addItem(Item item)
-    {
-        items.add(item);
-    }
-    
-    /**
-     * @param location el espacio que ocupa el objeto en la habitación.
-     * @return el objeto en la localización especificado.
-     */
-    public Item getItem(int location)
-    {
-        return items.get(location);
-    }
-    
-    /**
-     * @return el numero de objetos en el inventario.
-     */
-    public int getNumberOfRoomItems()
-    {
-        return items.size();
-    }
-    
+
     /**
      * Define an exit from this room.
      * @param direction The direction of the exit.
@@ -72,7 +46,7 @@ public class Room
     {
         rooms.put(direction, neighbor);
     }
-    
+
     /**
      * @param theExit dirección de la salida.
      * @return la habitación que esta en la salida especificada por parametro.
@@ -81,7 +55,7 @@ public class Room
     {
         return rooms.get(theExit);
     }
-    
+
     /**
      * Return a description of the room's exits.
      * For example: "Exits: north east west"
@@ -98,7 +72,7 @@ public class Room
         }        
         return theExits;
     }
-      
+
     /**
      * @return The description of the room.
      */
@@ -106,20 +80,29 @@ public class Room
     {
         return description;
     }
-    
+
+    /**
+     * Añade un objeto a la habitación.
+     * @param item el objeto a añadir.
+     */
+    public void addItem(Item item)
+    {
+        items.add(item);
+    }
+
     /**
      * Elimina un objeto de la habitación.
-     * @ID la ID del objeto a eliminar.
+     * @id la id del objeto a eliminar.
      * @return el objeto eliminado.
      */
-    public Item removeItem(int ID)
+    public Item removeItem(int id)
     {
         int i = 0;
         Item removedItem = null;
         boolean match = false;
         while (i < items.size() && !match)
         {
-            if (items.get(i).getID() == ID)
+            if (items.get(i).getId() == id)
             {
                 match = true;
                 removedItem = items.get(i);
@@ -129,7 +112,28 @@ public class Room
         }
         return removedItem;
     }
-    
+
+    /**
+     * @param id la id del objeto a buscar.
+     * @return el objeto.
+     */
+    public Item itemSearch(int id)
+    {
+        boolean match = false;
+        int i = 0;
+        Item item  = null;
+        while (i < items.size() && !match)
+        {
+            if (items.get(i).getId() == id)
+            {
+                item = items.get(i);
+                match = true;
+            }
+            i++;
+        }
+        return item;
+    }
+
     /**
      * @return una cadena con cada objeto con su descripción y peso en Kg.
      */
@@ -142,7 +146,7 @@ public class Room
         }
         return allItems;
     }
-    
+
     /**
      * Return a long description of this room, of the form:
      *     You are in the 'name of room'
@@ -158,7 +162,7 @@ public class Room
         }
         else
         {
-            longDescription = "Estás en " + getDescription() + ", se hallan los siguientes objetos:\n" + allItemsToString() + "\nSalidas: " + getExitString();
+            longDescription = "Estás en " + getDescription() + ", se hallan los siguientes objetos:\n" + allItemsToString() + "Salidas: " + getExitString();
         }        
         return longDescription;
     }
