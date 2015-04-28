@@ -91,26 +91,26 @@ public class Game
         salaDeProyecciones.addItem(new Item("proyector", 4.1F, true));
         salaDeProyecciones.addItem(new Item("Pantalla para proyector", 8.2F, false));
 
-        entrada.setExit("north", recepcion);
+        entrada.setExit("norte", recepcion);
 
-        recepcion.setExit("east", salaDeReuniones);
-        recepcion.setExit("south", entrada);
-        recepcion.setExit("west", recursosHumanos);
+        recepcion.setExit("este", salaDeReuniones);
+        recepcion.setExit("sur", entrada);
+        recepcion.setExit("oeste", recursosHumanos);
 
-        salaDeReuniones.setExit("north", servicios);
-        salaDeReuniones.setExit("west", recepcion);
-        salaDeReuniones.setExit("northWest", salaDeProyecciones);
+        salaDeReuniones.setExit("norte", servicios);
+        salaDeReuniones.setExit("oeste", recepcion);
+        salaDeReuniones.setExit("noroeste", salaDeProyecciones);
 
-        servicios.setExit("south", salaDeReuniones);
+        servicios.setExit("sur", salaDeReuniones);
 
-        recursosHumanos.setExit("north", despachoDelDirector);
-        recursosHumanos.setExit("east", recepcion);
+        recursosHumanos.setExit("norte", despachoDelDirector);
+        recursosHumanos.setExit("este", recepcion);
 
-        despachoDelDirector.setExit("east", salaDeProyecciones);
-        despachoDelDirector.setExit("south", recursosHumanos);
+        despachoDelDirector.setExit("este", salaDeProyecciones);
+        despachoDelDirector.setExit("sur", recursosHumanos);
 
-        salaDeProyecciones.setExit("southEast", salaDeReuniones);
-        salaDeProyecciones.setExit("west", despachoDelDirector);
+        salaDeProyecciones.setExit("sureste", salaDeReuniones);
+        salaDeProyecciones.setExit("oeste", despachoDelDirector);
 
         player.setCurrentRoom(entrada);
     }
