@@ -151,43 +151,34 @@ public class Game
     private boolean processCommand(Command command) 
     {
         boolean wantToQuit = false;
-        if(command.isUnknown()) {
-            System.out.println("No se a que te refieres...");
-            return false;
-        }
-
-        String commandWord = command.getCommandWord();
-        if (commandWord.equals("help")) {
+        Option commandWord = command.getCommandWord();
+        switch(commandWord)
+        {
+            case AYUDA: 
             printHelp();
-        }
-        else if (commandWord.equals("go")) {
+            break;
+            case IR:
             System.out.println();
-            goRoom(command);           
-        }
-        else if (commandWord.equals("quit")) {
+            goRoom(command);   
+            break;
+            case SALIR:
             wantToQuit = quit(command);
-        }
-        else if (commandWord.equals("look")) {
+            break;
+            case MIRAR:
             System.out.println();
             player.look();
-        }
-        else if (commandWord.equals("eat")) {
+            break;
+            case COMER:
             player.eat();
-        }
-        else if (commandWord.equals("back"))
-        {
+            break;
+            case VOLVER:
             if (player.back())
             {
                 System.out.println();
                 player.look();
             }           
-        }
-        else if(commandWord.equals("inventory"))
-        {
-            player.showInventory();
-        }
-        else if (commandWord.equals("take"))
-        {
+            break;
+            case COGER:
             if(command.hasSecondWord()) 
             {
                 try
@@ -203,10 +194,9 @@ public class Game
             {
                 System.out.println("¿Coger el qué?");
             }
-        }
-        else if (commandWord.equals("drop"))
-        {
-            if(command.hasSecondWord()) 
+            break;
+            case SOLTAR:
+             if(command.hasSecondWord()) 
             {
                 try
                 { 
@@ -221,6 +211,13 @@ public class Game
             {
                 System.out.println("¿Soltar el qué?");
             }
+            break;
+            case INVENTARIO:
+            player.showInventory();
+            break;
+            case DESCONOCIDO:
+            System.out.println("No se a que te refieres...");
+            break;
         }
         return wantToQuit;
     }
