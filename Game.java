@@ -139,7 +139,7 @@ public class Game
     private void printWelcome()
     {
         System.out.println("Bienvenido a The Office!");
-        System.out.println("Escribe 'help' si necesitas ayuda.");      
+        System.out.println("Escribe '" + Option.AYUDA.getCommand() + "' si necesitas ayuda.");      
         player.look();
     }
 

@@ -1,4 +1,4 @@
-import java.util.LinkedHashMap;
+import java.util.ArrayList;
 /**
  * This class is part of the "World of Zuul" application. 
  * "World of Zuul" is a very simple, text based adventure game.  
@@ -13,24 +13,18 @@ import java.util.LinkedHashMap;
 public class CommandWords
 {
     // all valid command words
-    private LinkedHashMap<String, Option> commands;
+    private ArrayList<Option> commands;
 
     /**
      * Constructor - initialise the command words.
      */
     public CommandWords()
     {
-        commands = new LinkedHashMap();
-        commands.put("ir", Option.IR);
-        commands.put("salir", Option.SALIR);
-        commands.put("ayuda", Option.AYUDA);
-        commands.put("mirar", Option.MIRAR);
-        commands.put("comer", Option.COMER);
-        commands.put("volver", Option.VOLVER);
-        commands.put("coger", Option.COGER);
-        commands.put("soltar", Option.SOLTAR);
-        commands.put("inventario", Option.INVENTARIO);
-        commands.put("desconocido", Option.DESCONOCIDO);
+        commands = new ArrayList();
+        for(Option option : Option.values())
+        {
+            commands.add(option);
+        }
     }
 
     /**
@@ -40,12 +34,17 @@ public class CommandWords
      */
     public boolean isCommand(String aString)
     {
-        for(int i = 0; i < commands.size(); i++) {
-            if(commands.containsKey(aString))
-                return true;
+        boolean match = false;
+        int i = 0;
+        while(i < commands.size() && !match)
+        {
+            if(commands.get(i).getCommand().equals(aString))
+            {
+                match = true;
+            }
+            i++;
         }
-        // if we get here, the string was not found in the commands
-        return false;
+        return match;
     }
 
     /**
@@ -53,12 +52,12 @@ public class CommandWords
      */
     public void showAll()
     {
-        String availableCommands = "";
-        for (String command : commands.keySet())
+        String availableCommands = "Los comandos disponibles son: \n";
+        for (Option command : commands)
         {
-            availableCommands += command + " ";
+            availableCommands += command.getCommand() + " ";
         }
-        System.out.println("Los comandos disponibles son: \n" + availableCommands);
+        System.out.println(availableCommands);
     }
 
     /**
@@ -69,12 +68,19 @@ public class CommandWords
      */
     public Option getCommandWord(String commandWord)
     {
-        Option option = commands.get(commandWord);
-        if (option == null)
+        Option option = Option.DESCONOCIDO;
+        boolean match = false;
+        int i = 0;
+        while(i < commands.size() && !match)
         {
             option = Option.DESCONOCIDO;
-        }
+            if(commands.get(i).getCommand().equals(commandWord))
+            {
+                option = commands.get(i);
+                match = true;
+            }
+            i++;
+         }
         return option;
     }
-
 }

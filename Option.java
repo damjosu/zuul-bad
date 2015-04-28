@@ -7,5 +7,17 @@
  */
 public enum Option
 {
-    IR, SALIR, AYUDA, MIRAR, COMER, VOLVER, COGER, SOLTAR, INVENTARIO, DESCONOCIDO;
-}
+    IR("ir"), SALIR("salir"), AYUDA ("ayuda"), 
+    MIRAR ("mirar"), COMER ("comer"), VOLVER("volver"), 
+    COGER("coger"), SOLTAR("soltar"), INVENTARIO("inventario"), DESCONOCIDO("desconocido");
+    private String command;
+    private Option(String command)
+    {
+        this.command = command;
+    }
+    
+    public String getCommand()
+    {
+        return command;
+    }
+ }
