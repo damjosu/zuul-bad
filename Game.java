@@ -26,10 +26,10 @@ public class Game
     public Game() 
     {
         parser = new Parser();
-        player = new Player("Josu", 5.3F);
+        player = new Player("Técnico", 40.3F, 75);
         createRooms();
     }
-
+    
     /**
      * Create all the rooms and link their exits together.
      */
@@ -37,19 +37,21 @@ public class Game
     {
         Room entrada, recepcion, salaDeReuniones, servicios, recursosHumanos, despachoDelDirector, salaDeProyecciones;
         
-        String passEntrada = "2533 Es la pass del ******** del director, la proxima "+
-                            "vez se pensará dos veces en recortar en servicio técnico, " + 
-                            "pasasela a todos los que te manden quejas";
         String passSalida = "9-10-1989";
+        String passEntrada = "2533 Es la pass del ******** del director, la proxima \n" +
+                             "vez se pensará dos veces en recortar en servicio técnico, \n" + 
+                             "pasasela a todos los que te manden quejas";  
+                                              
         entrada = new Room("entrada del edificio");
         entrada.addItem(new Item("Jarrón", 2.5F, true));
         entrada.addItem(new Item("Jarrón", 2.5F, true));
         entrada.addItem(new Item("Sofá", 50.3F, false));
+        entrada.addItem(new Gun(9));
 
         recepcion = new Room("recepción");
         recepcion.addItem(new Item("Silla", 3.5F, true));
         recepcion.addItem(new Item("telefono", 1.2F, true));
-        recepcion.addItem(new Item("PC", 6.3F, true, "2533"));
+        recepcion.addItem(new Item("PC", 6.3F, true));
         recepcion.addItem(new Item("Impresora", 3.7F, true));
         recepcion.addItem(new Item("escritorio", 30F, false));
 
@@ -67,6 +69,7 @@ public class Game
         servicios.addItem(new Item("Inhodoro", 25.6F, false));
         servicios.addItem(new Item("Lavabo", 10.6F, false));
         servicios.addItem(new Item("Espejo", 7.6F, true));
+        servicios.addItem(new Gun(8));
 
         recursosHumanos = new Room("recursos humanos");
         recursosHumanos.addItem(new Item("Silla", 3.5F, true));
@@ -95,7 +98,7 @@ public class Game
         salaDeProyecciones.addItem(new Item("proyector", 4.1F, true));
         salaDeProyecciones.addItem(new Item("Pantalla para proyector", 8.2F, false));
 
-        entrada.addDoor(new Door("norte", recepcion));
+        entrada.addDoor(new Door("norte", recepcion, new Npc("Paco")));
 
         recepcion.addDoor(new Door("este", salaDeReuniones));
         recepcion.addDoor(new Door("sur", entrada));
@@ -142,7 +145,10 @@ public class Game
      */
     private void printWelcome()
     {
-        System.out.println("Bienvenido a The Office!");
+        System.out.println("Bienvenido a The Office, eres un exempleado de la empresa que formaba parte \n" + 
+                           "del servicio tecnico al que han reemplazado por el sobrino del director. \n" +
+                           "Tras discutir con el director has optado por la opción más normal que es escabullirte \n" +
+                           "en la empresa por la noche y poner una bomba en su oficina.");
         System.out.println("Escribe '" + Option.AYUDA.getCommand() + "' si necesitas ayuda.");      
         player.look();
     }
@@ -242,7 +248,6 @@ public class Game
         }
         return wantToQuit;
     }
-
     // implementations of user commands:
 
     /**
@@ -252,8 +257,8 @@ public class Game
      */
     private void printHelp() 
     {
-        System.out.println("Estás perdido, solo");
-        System.out.println("en la oficina");
+        System.out.println("Estás en la oficina, denoche");
+        System.out.println("solo te acompoñan los guardias de seguridad");
         parser.showAllCommands();
     }
 
@@ -272,6 +277,20 @@ public class Game
         if (player.goRoom(command.getSecondWord()))
         {
             player.look();
+        }
+        else
+        {
+            if (player.getHp() == 0)
+            {
+                   // TERMINAR JUEGO MUERTO.
+            }
+            else
+            {
+                if (player.getCurrentRoom().doorsLocked())
+                {
+                    // TERMINAR JUEGO ENCERRADO.
+                }
+            }
         }
     }
 

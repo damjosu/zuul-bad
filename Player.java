@@ -1,3 +1,4 @@
+import java.util.Random;
 import java.util.Stack;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -9,12 +10,17 @@ import java.util.InputMismatchException;
  */
 public class Player
 {
+    private Random rnd;
+    private int hP;
     // Nombre del jugador.
     private String name;
     // id del jugador.
     private int id;
     // Capacidad total en Kg que puede llevar el jugador.
     private float capacity;
+    // Habilidad del jugador con las armas sobre 100.
+    private int skill;
+    private Gun gun;
     // Peso que lleva el jugador.
     private ArrayList<Item> inventory;
     // Habitación en la que se encuentra el jugador.
@@ -26,15 +32,58 @@ public class Player
     /**
      * Constructor de la clase Player.
      */
-    public Player(String name, float capacity)
+    public Player(String name, float capacity, int skill)
     {
+        rnd = new Random();
         map = new Stack<>();
         inventory = new ArrayList<>();
+        inventory.add(new Item("Bomba casera", 3F, true));
+        inventory.add(new Item("Detonador marca ACME", 0.5F, true));
         currentRoom = null;
+        hP = 100;
+        gun  = null;
+        this.skill = skill;
         this.name = name;        
         this.capacity = capacity;
         id = p;
         p++;
+    }
+
+    public boolean hasGun()
+    {
+        int i = 0;
+        boolean hasGun = false;
+        while (!hasGun && i < inventory.size())
+        {
+            if (inventory.get(i).getDescription().equals(Gun.DESCRIPTION)) 
+            {
+                gun = (Gun)inventory.get(i);
+                hasGun = true;
+            }
+            i++;
+        }
+        return hasGun;
+    }
+
+    public int getHp()
+    {
+        return hP;
+    }
+
+    public void setHp(int damage)
+    {
+        hP -= damage; 
+    }
+
+    public int shoot()
+    {
+        int aim = 0;
+        if (gun.getAmmo() != 0)
+        {
+            gun.shoot();
+            aim = (gun.ACCURACY + skill) / 2;
+        }
+        return aim;
     }
 
     /**
@@ -154,7 +203,12 @@ public class Player
     {
         currentRoom = room;
     }
-
+    
+    public Room getCurrentRoom()
+    {
+        return currentRoom;
+    }
+    
     /**
      * Impreme un mensaje informando de que el jugador ha comido.
      */
@@ -173,7 +227,7 @@ public class Player
         System.out.println(currentRoom.getLongDescription());
         System.out.println("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\");
     }
-    
+
     public void inspect(int id)
     {
         int i = 0;
@@ -188,7 +242,7 @@ public class Player
             }
             i++;
         }
-        
+
         if (item != null)
         {
             if (item.getNote() == null)
@@ -205,7 +259,7 @@ public class Player
             System.out.println("Ese objeto no está en la habitación ni en tu inventario");
         }
     } 
-    
+
     /**
      * Vuelve a la habitación previa a la actual. 
      * Si no es posible te informa de ello.
@@ -253,45 +307,135 @@ public class Player
                 }
                 else // Salida actual no bloqueada.
                 {
-                    if (currentDoor.isOpen()) // Salida actual abierta.
+                    Scanner keyboard = new Scanner(System.in);
+                    if (currentDoor.hasNpc())
                     {
-                        map.push(nextRoom);
-                        currentRoom = nextRoom;
-                        gone = true;
-                    }
-                    else // Salida actual cerrada.
-                    {
-                        int pass = -1;
-                        Scanner keyboard = new Scanner(System.in);                    
-                        System.out.println("Hay un panel electronico, escribe 'si' para introducir la contraseña o 'no' para volver más tarde.");
-                        String introducePass = keyboard.next();
-
-                        if (introducePass.equals("si")) // Introducir contraseña
+                        System.out.println("Te has topado con " + currentDoor.getNpc().getName() + " introduce 'si' para enfrentarlo o 'no' para escapar.");
+                        if (keyboard.next().equals("si"))
                         {
-                            System.out.println("Introduce la contraseña");
-                            try
-                            { 
-                                pass = keyboard.nextInt();
-                            }
-                            catch(InputMismatchException e)
-                            { 
-                                // Se queda la contraseña por defecto.
-                            }  
+                            boolean playerDead = false;
+                            boolean npcDead = false;
+                            boolean playerOutOfAmmo = false;
+                            boolean npcOutOfAmmo = false;
+                            int playerShoots = 0;
+                            int playerMiss = 0;
+                            int npcShoots = 0;
+                            int npcMiss = 0;
+                            do {
+                                if (hP >= 0 && currentDoor.getNpc().getHp() >= 0)
+                                {
+                                    if (hasGun())
+                                    {
+                                        if (gun.getAmmo() != 0)
+                                        {
+                                            if (rnd.nextInt(100) + 1 < shoot())
+                                            {
+                                                currentDoor.getNpc().setHp(Gun.DAMAGE);
+                                                playerShoots++;
+                                            }
+                                            else
+                                            {
+                                                playerMiss++;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            playerOutOfAmmo = true;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        playerOutOfAmmo = true;
+                                    }
+                                }
+                                else
+                                {
+                                    npcDead = true;
+                                }
 
-                            if (pass == currentDoor.getPass()) // Contraseña introducida correcta.
+                                if (hP >= 0 && currentDoor.getNpc().getHp() >= 0) 
+                                {
+                                    if (currentDoor.getNpc().getAmmo() !=0)
+                                    {
+                                        if (rnd.nextInt(100) + 1 < currentDoor.getNpc().shoot())
+                                        {
+                                            setHp(Gun.DAMAGE);
+                                            npcShoots++;
+                                        }
+                                        else
+                                        {
+                                            npcMiss++;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        npcOutOfAmmo =true;
+                                    }
+                                }
+                                else
+                                {
+                                    playerDead = true;
+                                }                    
+                            } while ((!playerOutOfAmmo || !npcOutOfAmmo) && (!playerDead && !npcDead));  
+                            System.out.println("Has realizado " + (playerShoots + playerMiss) + " disparos de los cuales has fallado " + playerMiss +
+                                "\n" + currentDoor.getNpc().getName() + " ha realizado " + (npcShoots + npcMiss) + " disparos de los cuales ha fallado " + npcMiss);
+                            if (!npcDead && npcOutOfAmmo && !playerDead )
                             {
-                                currentDoor.open();
-                                map.push(nextRoom);
-                                currentRoom = nextRoom;
-                                System.out.println("Correcto");
-                                gone = true;
+                                System.out.println("Tienes suerte de haber sobrevivido");
+                                currentDoor.removeNpc();
                             }
-                            else // Contraseña introducida incorrecta.
+                            else if (playerDead)
                             {
-                                currentDoor.lock();
-                                System.out.println("Incorrecto");
+                                System.out.println("Has muerto en el intento.");
                             }
-                        }                    
+                            else if (npcDead)
+                            {
+                                System.out.println("Has matado a " + currentDoor.getNpc().getName());
+                                currentDoor.removeNpc();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (currentDoor.isOpen()) // Salida actual abierta.
+                        {
+                            map.push(nextRoom);
+                            currentRoom = nextRoom;
+                            gone = true;
+                        }
+                        else // Salida actual cerrada.
+                        {
+                            int pass = -1;      
+                            System.out.println("Hay un panel electronico, escribe 'si' para introducir la contraseña o 'no' para volver más tarde.");
+                            String introducePass = keyboard.next();
+
+                            if (introducePass.equals("si")) // Introducir contraseña
+                            {
+                                System.out.println("Introduce la contraseña");
+                                try
+                                { 
+                                    pass = keyboard.nextInt();
+                                }
+                                catch(InputMismatchException e)
+                                { 
+                                    // Se queda la contraseña por defecto.
+                                }  
+
+                                if (pass == currentDoor.getPass()) // Contraseña introducida correcta.
+                                {
+                                    currentDoor.open();
+                                    map.push(nextRoom);
+                                    currentRoom = nextRoom;
+                                    System.out.println("Correcto");
+                                    gone = true;
+                                }
+                                else // Contraseña introducida incorrecta.
+                                {
+                                    currentDoor.lock();
+                                    System.out.println("Incorrecto");
+                                }
+                            }                    
+                        }
                     }
                 }    
             }

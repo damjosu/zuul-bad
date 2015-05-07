@@ -17,6 +17,7 @@ public class Door
     private boolean isLocked;
     // Contraseña del panel de la puerta.
     private int pass;    
+    private Npc npc;
 
     /**
      * Constructor for objects of class Door
@@ -25,6 +26,20 @@ public class Door
     {
         this.to = to;
         this.direction = direction;
+        npc = null;
+        pass = -1;
+        isOpen = true;
+        isLocked = false;
+    }
+    
+    /**
+     * Constructor for objects of class Door
+     */
+    public Door(String direction, Room to, Npc npc)
+    {
+        this.to = to;
+        this.direction = direction;
+        this.npc = npc;
         pass = -1;
         isOpen = true;
         isLocked = false;
@@ -40,6 +55,21 @@ public class Door
         this.pass = pass;
         isOpen = false;
         isLocked = false;
+    }
+    
+    public boolean hasNpc()
+    {
+        return (npc != null);
+    }
+    
+    public Npc getNpc()
+    {
+        return npc;
+    }
+    
+    public void removeNpc()
+    {
+        npc = null;
     }
     
     public String getDirection()
