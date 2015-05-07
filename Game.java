@@ -36,7 +36,11 @@ public class Game
     private void createRooms()
     {
         Room entrada, recepcion, salaDeReuniones, servicios, recursosHumanos, despachoDelDirector, salaDeProyecciones;
-
+        
+        String passEntrada = "2533 Es la pass del ******** del director, la proxima "+
+                            "vez se pensará dos veces en recortar en servicio técnico, " + 
+                            "pasasela a todos los que te manden quejas";
+        String passSalida = "9-10-1989";
         entrada = new Room("entrada del edificio");
         entrada.addItem(new Item("Jarrón", 2.5F, true));
         entrada.addItem(new Item("Jarrón", 2.5F, true));
@@ -45,7 +49,7 @@ public class Game
         recepcion = new Room("recepción");
         recepcion.addItem(new Item("Silla", 3.5F, true));
         recepcion.addItem(new Item("telefono", 1.2F, true));
-        recepcion.addItem(new Item("PC", 6.3F, true));
+        recepcion.addItem(new Item("PC", 6.3F, true, "2533"));
         recepcion.addItem(new Item("Impresora", 3.7F, true));
         recepcion.addItem(new Item("escritorio", 30F, false));
 
@@ -66,7 +70,7 @@ public class Game
 
         recursosHumanos = new Room("recursos humanos");
         recursosHumanos.addItem(new Item("Silla", 3.5F, true));
-        recursosHumanos.addItem(new Item("PC", 3.5F, true));
+        recursosHumanos.addItem(new Item("PC", 3.5F, true, passEntrada));
         recursosHumanos.addItem(new Item("Impresora", 3.7F, true));
         recursosHumanos.addItem(new Item("Reclamaciones", 1.3F, true));
         recursosHumanos.addItem(new Item("Ficheros", 35.4F, false));
@@ -77,7 +81,7 @@ public class Game
         despachoDelDirector.addItem(new Item("Puros", 0.2F, true));
         despachoDelDirector.addItem(new Item("Diploma", 2.5F, true));
         despachoDelDirector.addItem(new Item("Silla", 3.5F, true));
-        despachoDelDirector.addItem(new Item("Foto familiar", 0.5F, true));
+        despachoDelDirector.addItem(new Item("Foto familiar", 0.5F, true, passSalida));
         despachoDelDirector.addItem(new Item("Portatil", 2.5F, true));
         despachoDelDirector.addItem(new Item("Sofá", 50.3F, false));
 
@@ -91,26 +95,26 @@ public class Game
         salaDeProyecciones.addItem(new Item("proyector", 4.1F, true));
         salaDeProyecciones.addItem(new Item("Pantalla para proyector", 8.2F, false));
 
-        entrada.setExit("norte", recepcion);
+        entrada.addDoor(new Door("norte", recepcion));
 
-        recepcion.setExit("este", salaDeReuniones);
-        recepcion.setExit("sur", entrada);
-        recepcion.setExit("oeste", recursosHumanos);
+        recepcion.addDoor(new Door("este", salaDeReuniones));
+        recepcion.addDoor(new Door("sur", entrada));
+        recepcion.addDoor(new Door("oeste", recursosHumanos));
 
-        salaDeReuniones.setExit("norte", servicios);
-        salaDeReuniones.setExit("oeste", recepcion);
-        salaDeReuniones.setExit("noroeste", salaDeProyecciones);
+        salaDeReuniones.addDoor(new Door("norte", servicios));
+        salaDeReuniones.addDoor(new Door("oeste", recepcion));
+        salaDeReuniones.addDoor(new Door("noroeste", salaDeProyecciones));
 
-        servicios.setExit("sur", salaDeReuniones);
+        servicios.addDoor(new Door("sur", salaDeReuniones));
 
-        recursosHumanos.setExit("norte", despachoDelDirector);
-        recursosHumanos.setExit("este", recepcion);
+        recursosHumanos.addDoor(new Door("norte", despachoDelDirector, 2533));
+        recursosHumanos.addDoor(new Door("este", recepcion));
 
-        despachoDelDirector.setExit("este", salaDeProyecciones);
-        despachoDelDirector.setExit("sur", recursosHumanos);
+        despachoDelDirector.addDoor(new Door("este", salaDeProyecciones, 9101989));
+        despachoDelDirector.addDoor(new Door("sur", recursosHumanos, 9101989));
 
-        salaDeProyecciones.setExit("sureste", salaDeReuniones);
-        salaDeProyecciones.setExit("oeste", despachoDelDirector);
+        salaDeProyecciones.addDoor(new Door("sureste", salaDeReuniones));
+        salaDeProyecciones.addDoor(new Door("oeste", despachoDelDirector, 2533));
 
         player.setCurrentRoom(entrada);
     }
@@ -196,7 +200,7 @@ public class Game
             }
             break;
             case SOLTAR:
-             if(command.hasSecondWord()) 
+            if(command.hasSecondWord()) 
             {
                 try
                 { 
@@ -214,6 +218,23 @@ public class Game
             break;
             case INVENTARIO:
             player.showInventory();
+            break;
+            case INSPECCIONAR:
+            if(command.hasSecondWord()) 
+            {
+                try
+                { 
+                    player.inspect(Integer.parseInt(command.getSecondWord())); 
+                }
+                catch(NumberFormatException e)
+                { 
+                    System.out.println("ID introducida incorrecta");
+                }  
+            }
+            else
+            {
+                System.out.println("¿Inspeccionar el qué?");
+            }
             break;
             case DESCONOCIDO:
             System.out.println("No se a que te refieres...");
@@ -247,8 +268,11 @@ public class Game
             System.out.println("Ir a donde?");
             return;
         }
-        player.goRoom(command.getSecondWord());
-        player.look();
+        
+        if (player.goRoom(command.getSecondWord()))
+        {
+            player.look();
+        }
     }
 
     /** 

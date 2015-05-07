@@ -9,7 +9,8 @@ public enum Option
 {
     IR("ir"), SALIR("salir"), AYUDA ("ayuda"), 
     MIRAR ("mirar"), COMER ("comer"), VOLVER("volver"), 
-    COGER("coger"), SOLTAR("soltar"), INVENTARIO("inventario"), DESCONOCIDO("desconocido");
+    COGER("coger"), SOLTAR("soltar"), INVENTARIO("inventario"),
+    INSPECCIONAR("inspeccionar"), DESCONOCIDO("desconocido");
     private String command;
     private Option(String command)
     {

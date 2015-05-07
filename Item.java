@@ -9,6 +9,8 @@ public class Item
     private int id;
     // Descripción del objeto
     private String description;
+    // Algo inscrito en el objeto.
+    private String note;
     // Peso del objeto
     private float weight;
     // Si el objeto se puede llevar o no
@@ -24,10 +26,29 @@ public class Item
         this.description = description;
         this.weight = weight;
         this.carryAble = carryAble;
+        note = null;
         id = i;
         i++;
     }
-
+         
+    /**
+     * Constructor de la clase Item.
+     */
+    public Item(String description, float weight, boolean carryAble, String note)
+    {
+        this.description = description;
+        this.weight = weight;
+        this.carryAble = carryAble;
+        this.note = note;
+        id = i;
+        i++;
+    }
+    
+    public String getNote()
+    {
+        return note;
+    }
+    
     /**
      * @return true si el objeto se puede coger, y false en caso contrario.
      */

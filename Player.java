@@ -1,5 +1,7 @@
 import java.util.Stack;
 import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.InputMismatchException;
 /**
  * Clase Player
  * @author (Josu) 
@@ -167,9 +169,43 @@ public class Player
      */
     public void look()
     {
+        System.out.println("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\");
         System.out.println(currentRoom.getLongDescription());
+        System.out.println("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\");
     }
-
+    
+    public void inspect(int id)
+    {
+        int i = 0;
+        boolean gotIt = false;
+        Item item = currentRoom.itemSearch(id);
+        while (item == null && gotIt && i < inventory.size())
+        {
+            if (inventory.get(i).getId() == id)
+            {
+                item = inventory.get(i);
+                gotIt = true;
+            }
+            i++;
+        }
+        
+        if (item != null)
+        {
+            if (item.getNote() == null)
+            {
+                System.out.println("Es un simple " + item.getDescription());
+            }
+            else
+            {
+                System.out.println("Parece que tiene algo escrito: " + item.getNote());
+            }
+        }
+        else
+        {
+            System.out.println("Ese objeto no está en la habitación ni en tu inventario");
+        }
+    } 
+    
     /**
      * Vuelve a la habitación previa a la actual. 
      * Si no es posible te informa de ello.
@@ -194,15 +230,72 @@ public class Player
      * En caso de no haber salida en esa dirección te informa de ello.
      * @direction direccion a la que va el jugador.
      */
-    public void goRoom(String direction)
+    public boolean goRoom(String direction)
     {
-        Room nextRoom = currentRoom.getExit(direction);        
-        if (nextRoom == null) {
-            System.out.println("No hay puerta!");
+        boolean gone = false;
+        Room nextRoom = currentRoom.getRoom(direction);
+        Door currentDoor = currentRoom.getDoor(direction);
+        if (currentRoom.doorsLocked()) // Salidas de la habitación actual cerradas.
+        {
+            System.out.println("Estás atrapado");
         }
-        else {
-            map.push(currentRoom);
-            currentRoom = nextRoom;
+        else // Salidas de la habitación actual abiertas.
+        {
+            if (nextRoom == null) // No hay habitación en esa dirección.
+            {
+                System.out.println("¡No hay puerta!");
+            }
+            else 
+            {
+                if (currentDoor.isLocked()) // Salida actual bloqueada.
+                {
+                    System.out.println("La salida está bloqueada");
+                }
+                else // Salida actual no bloqueada.
+                {
+                    if (currentDoor.isOpen()) // Salida actual abierta.
+                    {
+                        map.push(nextRoom);
+                        currentRoom = nextRoom;
+                        gone = true;
+                    }
+                    else // Salida actual cerrada.
+                    {
+                        int pass = -1;
+                        Scanner keyboard = new Scanner(System.in);                    
+                        System.out.println("Hay un panel electronico, escribe 'si' para introducir la contraseña o 'no' para volver más tarde.");
+                        String introducePass = keyboard.next();
+
+                        if (introducePass.equals("si")) // Introducir contraseña
+                        {
+                            System.out.println("Introduce la contraseña");
+                            try
+                            { 
+                                pass = keyboard.nextInt();
+                            }
+                            catch(InputMismatchException e)
+                            { 
+                                // Se queda la contraseña por defecto.
+                            }  
+
+                            if (pass == currentDoor.getPass()) // Contraseña introducida correcta.
+                            {
+                                currentDoor.open();
+                                map.push(nextRoom);
+                                currentRoom = nextRoom;
+                                System.out.println("Correcto");
+                                gone = true;
+                            }
+                            else // Contraseña introducida incorrecta.
+                            {
+                                currentDoor.lock();
+                                System.out.println("Incorrecto");
+                            }
+                        }                    
+                    }
+                }    
+            }
         }
+        return gone;
     }
 }
